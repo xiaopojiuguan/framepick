@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "framepick"
+version = "0.1.0"
+description = "智能选片：从一组同场景照片中选出最值得保留的一张，并给出最优取景框"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [
+  { name = "蒋锦宏", email = "2966308642@qq.com" },
+  { name = "张满" },
+  { name = "章丞轩" },
+]
+keywords = ["image-aesthetics", "photo-culling", "image-cropping", "learning-to-rank"]
+dependencies = ["numpy>=1.23", "pillow>=9.2"]
+
+[project.optional-dependencies]
+deep = ["torch>=2.0", "torchvision>=0.15", "transformers>=4.38"]
+ui = ["gradio>=4.0"]
+dev = ["pytest>=7.0", "markdown>=3.4"]
+
+[project.scripts]
+framepick = "framepick.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

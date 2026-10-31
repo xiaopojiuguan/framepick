@@ -112,13 +112,13 @@ class FramePick:
         config: Config | None = None,
         weights: FusionWeights | None = None,
         aesthetic_scorer=None,
-        vlm_scorer=None,
+        vlm=None,
     ):
         self.cfg = config or Config()
         self.weights = weights or FusionWeights()
         self.heuristic = HeuristicScorer()
         self.aesthetic_scorer = aesthetic_scorer
-        self.vlm = vlm_scorer
+        self.vlm = vlm
 
     # ---------------------------------------------------------------- 单图
     def _photo_candidates(self, rgb: np.ndarray, name: str) -> list[CandidateResult]:

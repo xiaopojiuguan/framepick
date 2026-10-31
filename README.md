@@ -35,7 +35,7 @@
 
 ```bash
 python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -e .            # 安装为可编辑包（也可用 pip install -r requirements.txt + PYTHONPATH=src）
 
 # 生成一组合成演示图（无需任何数据集）
 python scripts/make_demo_data.py
@@ -50,7 +50,8 @@ python app/gradio_app.py
 命令行：
 
 ```bash
-python -m framepick.cli --input data/sample/series_01 --out outputs/run01 --topk 3
+framepick --input data/sample/series_01 --out outputs/run01 --topk 3
+# 未安装时等价写法：PYTHONPATH=src python -m framepick.cli --input ... 
 ```
 
 输出示例（`outputs/run01/result.json`）：
@@ -84,7 +85,7 @@ python -m framepick.cli --input data/sample/series_01 --out outputs/run01 --topk
     "file": "IMG_001.jpg",
     "crop": [307, 279, 1024, 682],
     "utility": 0.721,
-    "scores": {"quality": 0.71, "aesthetic": 0.57, "composition": 0.71, "subject": 0.29},
+    "scores": {"quality": 0.714, "aesthetic": 0.573, "composition": 0.710, "subject": 0.592},
     "reason": "组内最优：主体居中、画面稳定，焦点锐利，曝光正常，主体完整未被裁断。"
   },
   "ranking": [["IMG_001.jpg", 0.721], ["IMG_003.jpg", 0.607], ["IMG_002.jpg", 0.582]]
