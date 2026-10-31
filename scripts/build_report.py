@@ -249,7 +249,8 @@ pre code { background: none; color: inherit; padding: 0; font-size: 8.8pt; }
 blockquote { margin: 10px 0; padding: 9px 14px; background: #fffbeb;
   border-left: 3px solid #f59e0b; color: #4b5563; font-size: 9.8pt; }
 
-svg { display: block; margin: 14px auto; max-width: 100%; }
+svg { display: block; margin: 14px auto; width: 100%; max-width: 100%; height: auto; }
+img { max-width: 100%; height: auto; }
 """
 
 
