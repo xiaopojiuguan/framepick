@@ -182,7 +182,6 @@ COVER = """
     <tr><th>提交日期</th><td>2026 年 11 月</td></tr>
   </table>
 </section>
-<div class="page-break"></div>
 """
 
 CSS = """
@@ -196,7 +195,7 @@ body {
   font-size: 10.4pt; line-height: 1.82; color: #1b1b1b; margin: 0;
   -webkit-font-smoothing: antialiased;
 }
-.cover { page-break-after: always; padding-top: 46mm; }
+.cover { page-break-after: always; break-after: page; padding-top: 46mm; }
 .cover-tag { font-family: "Microsoft YaHei", sans-serif; font-size: 10pt; letter-spacing: 3px;
   color: #2b6cb0; border-left: 3px solid #2b6cb0; padding-left: 10px; }
 .cover-title { font-family: "Microsoft YaHei", sans-serif; font-size: 40pt; margin: 24mm 0 6mm;
@@ -274,7 +273,7 @@ def build() -> Path:
 <html lang="zh-CN"><head><meta charset="utf-8"/>
 <title>智能选片 · 期中设计报告</title>
 <style>{CSS}</style></head>
-<body>{COVER}<div class="page-break"></div>{body_html}</body></html>"""
+<body>{COVER}{body_html}</body></html>"""
     out_html = DOCS / "设计报告.html"
     out_html.write_text(doc, encoding="utf-8")
     return out_html

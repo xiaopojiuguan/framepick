@@ -12,7 +12,7 @@ body {
   font-size: 10.4pt; line-height: 1.82; color: #1b1b1b; margin: 0;
   -webkit-font-smoothing: antialiased;
 }
-.cover { page-break-after: always; padding-top: 46mm; }
+.cover { page-break-after: always; break-after: page; padding-top: 46mm; }
 .cover-tag { font-family: "Microsoft YaHei", sans-serif; font-size: 10pt; letter-spacing: 3px;
   color: #2b6cb0; border-left: 3px solid #2b6cb0; padding-left: 10px; }
 .cover-title { font-family: "Microsoft YaHei", sans-serif; font-size: 40pt; margin: 24mm 0 6mm;
@@ -84,8 +84,7 @@ img { max-width: 100%; height: auto; }
     <tr><th>提交日期</th><td>2026 年 11 月</td></tr>
   </table>
 </section>
-<div class="page-break"></div>
-<div class="page-break"></div><h2>摘要</h2>
+<h2>摘要</h2>
 <p>手机与相机的连拍让"同一场景拍很多张"成为常态，而人从中挑一张的过程（选片）既耗时又依赖经验。本报告把选片形式化为<strong>组内相对排序</strong>问题：给定同一场景的 <span class="imath">n</span> 张照片，输出组内质量排序、最优的一张以及它的最优取景框。我们指出该任务与常规图像美学评价（IAA）的关键差异——同组照片在绝对美学分上高度趋同，因此必须建模<strong>相对偏好</strong>而非绝对分数。</p>
 <p>系统采用"候选生成—候选评价—组内排序"三段式架构：以谱残差显著性给出主体位置先验，用宽高比 × 面积比例 × 构图锚点三路生成候选取景框并做 IoU 抑制；用技术质量、美学模型、构图规则、多模态大模型四类评分器给出多维证据；再以 Bradley-Terry 模型把成对偏好学成融合权重，完成组内排序。目前已实现可运行原型（纯 numpy/PIL 即可跑通全链路），在合成连拍数据上 Top-1 与人工首选一致率 2/2，并配套了自建数据标注工具与训练脚本。报告最后给出数据采集标准、标注协议、评价指标与六组实验计划。</p>
 <hr />
