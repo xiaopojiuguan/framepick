@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"/>
+<title>智能选片 · 期中设计报告</title>
+<style>
+@page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+@media screen {
+  body { width: 210mm; margin: 0 auto; padding: 18mm 16mm; background: #fff; }
+}
+* { box-sizing: border-box; }
+body {
+  font-family: "Source Han Serif SC", "Songti SC", "SimSun", "Microsoft YaHei", serif;
+  font-size: 10.4pt; line-height: 1.82; color: #1b1b1b; margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+.cover { page-break-after: always; padding-top: 46mm; }
+.cover-tag { font-family: "Microsoft YaHei", sans-serif; font-size: 10pt; letter-spacing: 3px;
+  color: #2b6cb0; border-left: 3px solid #2b6cb0; padding-left: 10px; }
+.cover-title { font-family: "Microsoft YaHei", sans-serif; font-size: 40pt; margin: 24mm 0 6mm;
+  letter-spacing: 6px; font-weight: 700; color: #111827; }
+.cover-sub { font-size: 13pt; line-height: 1.9; color: #374151; }
+.cover-line { height: 2px; background: linear-gradient(90deg,#2b6cb0,#b45309); margin: 16mm 0 10mm; }
+.cover-table { width: 100%; border-collapse: collapse; font-size: 10.5pt; }
+.cover-table th { width: 26%; text-align: left; background: none; border: none;
+  border-bottom: 1px solid #e5e7eb; color: #6b7280; font-weight: 400; padding: 7px 0; }
+.cover-table td { border-bottom: 1px solid #e5e7eb; padding: 7px 0; }
+.page-break { page-break-after: always; }
+
+h1 { font-family: "Microsoft YaHei", sans-serif; font-size: 19pt; color: #111827;
+  margin: 0 0 12px; padding-bottom: 8px; border-bottom: 2px solid #111827; }
+h2 { font-family: "Microsoft YaHei", sans-serif; font-size: 14pt; color: #111827;
+  margin: 26px 0 10px; padding-left: 9px; border-left: 4px solid #2b6cb0;
+  page-break-after: avoid; }
+h3 { font-family: "Microsoft YaHei", sans-serif; font-size: 11.6pt; color: #1f2937;
+  margin: 18px 0 6px; page-break-after: avoid; }
+h4 { font-family: "Microsoft YaHei", sans-serif; font-size: 10.6pt; margin: 14px 0 4px; }
+p { margin: 7px 0; text-align: justify; }
+ul, ol { margin: 7px 0 7px 4px; padding-left: 20px; }
+li { margin: 3px 0; }
+strong { color: #111827; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 18px 0; }
+a { color: #2b6cb0; text-decoration: none; }
+
+table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 9.1pt;
+  font-family: "Microsoft YaHei", "Songti SC", sans-serif; page-break-inside: auto; }
+th { background: #eef2f7; color: #1f2937; font-weight: 600; text-align: left;
+  padding: 6px 8px; border: 1px solid #d5dde7; }
+td { padding: 6px 8px; border: 1px solid #e3e8ef; vertical-align: top; }
+tr { page-break-inside: avoid; }
+tbody tr:nth-child(even) { background: #fafbfd; }
+
+code { font-family: "Cascadia Mono", Consolas, monospace; font-size: 9.2pt;
+  background: #f3f4f6; padding: 1px 4px; border-radius: 3px; color: #b91c1c; }
+pre { background: #0f172a; color: #e5e7eb; padding: 12px 14px; border-radius: 8px;
+  font-size: 8.8pt; line-height: 1.55; overflow-x: auto; page-break-inside: avoid; }
+pre code { background: none; color: inherit; padding: 0; font-size: 8.8pt; }
+
+.formula { font-family: "Cambria Math", "Times New Roman", serif; font-size: 12pt;
+  text-align: center; margin: 12px 0; padding: 10px; background: #f8fafc;
+  border-left: 3px solid #cbd5e1; color: #111827; }
+.formula sub, .formula sup { font-size: 70%; }
+.imath { font-family: "Cambria Math", "Times New Roman", serif; font-size: 10.6pt;
+  color: #0f172a; padding: 0 1px; }
+.imath sub, .imath sup { font-size: 70%; }
+
+blockquote { margin: 10px 0; padding: 9px 14px; background: #fffbeb;
+  border-left: 3px solid #f59e0b; color: #4b5563; font-size: 9.8pt; }
+
+svg { display: block; margin: 14px auto; max-width: 100%; }
+</style></head>
+<body>
+<section class="cover">
+  <div class="cover-tag">机器视觉 · 2026 期中设计报告</div>
+  <h1 class="cover-title">智能选片</h1>
+  <div class="cover-sub">从一组相似照片中选出最值得保留的一张<br/>——组内相对排序与取景框优化</div>
+  <div class="cover-line"></div>
+  <table class="cover-table">
+    <tr><th>项目名称</th><td>FramePick · 智能选片与取景框优化系统</td></tr>
+    <tr><th>课程</th><td>机器视觉（2026 秋季）</td></tr>
+    <tr><th>组长</th><td>蒋锦宏　202493006</td></tr>
+    <tr><th>组员</th><td>张满　202493002</td></tr>
+    <tr><th>组员</th><td>章丞轩　202493001</td></tr>
+    <tr><th>代码仓库</th><td>github.com/xiaopojiuguan/framepick</td></tr>
+    <tr><th>提交日期</th><td>2026 年 11 月</td></tr>
+  </table>
+</section>
+<div class="page-break"></div>
+<div class="page-break"></div><h2>摘要</h2>
+<p>手机与相机的连拍让"同一场景拍很多张"成为常态，而人从中挑一张的过程（选片）既耗时又依赖经验。本报告把选片形式化为<strong>组内相对排序</strong>问题：给定同一场景的 <span class="imath">n</span> 张照片，输出组内质量排序、最优的一张以及它的最优取景框。我们指出该任务与常规图像美学评价（IAA）的关键差异——同组照片在绝对美学分上高度趋同，因此必须建模<strong>相对偏好</strong>而非绝对分数。</p>
+<p>系统采用"候选生成—候选评价—组内排序"三段式架构：以谱残差显著性给出主体位置先验，用宽高比 × 面积比例 × 构图锚点三路生成候选取景框并做 IoU 抑制；用技术质量、美学模型、构图规则、多模态大模型四类评分器给出多维证据；再以 Bradley-Terry 模型把成对偏好学成融合权重，完成组内排序。目前已实现可运行原型（纯 numpy/PIL 即可跑通全链路），在合成连拍数据上 Top-1 与人工首选一致率 2/2，并配套了自建数据标注工具与训练脚本。报告最后给出数据采集标准、标注协议、评价指标与六组实验计划。</p>
+<hr />
+<h2>1 问题理解与任务定义</h2>
+<h3>1.1 任务背景</h3>
+<p>课程给出的场景是：春夏之交，人们用镜头记录身边的美好生活。同一场景常会连拍多张——花海里换了几个角度、操场上抓了几个瞬间、街角等了一次光线。整理照片时，人要在这一组相似照片里做选择：<strong>哪一张最值得保留</strong>。</p>
+<p>这一选择是"视觉质量 + 画面美感 + 瞬间价值"的综合判断，且高度依赖上下文：单看一张"还行"的照片，和同组里"对焦虚了"的那几张放在一起，就显得很好。这正是本任务与经典美学评价的分水岭。</p>
+<h3>1.2 形式化定义</h3>
+<p>设同一场景的一组照片 <span class="imath">S=&#123;I<sub>1</sub>,…,I<sub>n</sub>&#125;</span>，每张照片允许的取景框集合为</p>
+<div class="formula">C(I<sub>i</sub>)=&#123; c ⊂ dom(I<sub>i</sub>) | area(c)≥ α· area(I<sub>i</sub>), aspect(c)∈ A &#125;</div>
+
+<p>其中 <span class="imath">A</span> 为允许的宽高比集合。系统需要求</p>
+<div class="formula">(i<sup>*</sup>, c<sup>*</sup>) = argmax<sub>i, c∈ C(I<sub>i</sub>)</sub> U(φ(I<sub>i</sub>,c); S),</div>
+
+<p>并输出：</p>
+<ol>
+<li><strong>组内完整排序</strong> <span class="imath">π: &#123;1..n&#125;→&#123;1..n&#125;</span>（而不只是一个答案，排序更有用也更可评测）；</li>
+<li><strong>最优取景框</strong> <span class="imath">c<sup>*</sup></span>（在原图坐标系下给出）；</li>
+<li><strong>可解释理由</strong>（哪一维赢了、赢多少）；</li>
+<li>可选的 <strong>Top-K 备选</strong>（给人留最终决定权）。</li>
+</ol>
+<p>其中 <span class="imath">φ(·)</span> 是候选框的特征表示，<span class="imath">U(·;S)</span> 强调效用是<strong>相对于本组</strong> <span class="imath">S</span> 计算的——这是本方案的核心设计。</p>
+<h3>1.3 为什么"绝对分数"会失效</h3>
+<p>Chang 等人（SIGGRAPH 2016）在其照片分诊（photo triage）工作中给出了清晰证据：对同一场景的连拍，绝对美学模型会给几乎相同的分数。</p>
+<p>原因有三：</p>
+<ul>
+<li><strong>输入几乎相同</strong>：同组照片的语义内容、光照条件、场景布局高度一致，模型看到的是同一分布下的样本；</li>
+<li><strong>差异出现在低层</strong>：真正区分它们的往往是几度的手抖、半个档位的曝光、主体 20 像素的位移——这些细节在全局池化特征里被平均掉了；</li>
+<li><strong>评分噪声大于信号</strong>：AVA 类数据集上人类评分的标准差常在 1.5 分（10 分制）量级，而组内差异可能只有 0.3 分。</li>
+</ul>
+<p>我们实测也复现了这一现象：直接用启发式美学分对同组 8 张打分，分差被压缩在 0.05 以内，排序几乎随机；引入组内标准化后，同一批照片的效用差拉开到 0.4 以上（见 §5.2）。<strong>结论：本任务的建模对象应是"组内相对偏好"，绝对美学模型只作为其中一路证据。</strong></p>
+<h3>1.4 任务难点</h3>
+<table>
+<thead>
+<tr>
+<th>难点</th>
+<th>具体表现</th>
+<th>本方案的应对</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>组内差异小</td>
+<td>绝对分数趋同，排序不稳定</td>
+<td>组内标准化 + 成对偏好学习</td>
+</tr>
+<tr>
+<td>搜索空间大</td>
+<td>取景框组合为 <span class="imath">O(W<sup>2</sup>H<sup>2</sup>)</span></td>
+<td>构图先验注入 + 网格滑窗 + NMS，压到数十个候选</td>
+</tr>
+<tr>
+<td>美学多义</td>
+<td>不同人偏好不同、同一人不同时刻也不同</td>
+<td>分布预测（NIMA 的均值+方差）、成对标注优于绝对打分</td>
+</tr>
+<tr>
+<td>语义相关</td>
+<td>"闭眼""表情崩了""有人闯入"无法用低层特征判断</td>
+<td>多模态大模型做语义复核</td>
+</tr>
+<tr>
+<td>端侧约束</td>
+<td>一组 10 张要在秒级内出结果</td>
+<td>级联：便宜的规则先筛，贵的模型只评决赛选手</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2 相关方法调研</h2>
+<p>课程要求覆盖"图像美学评价 / 图像编辑 / 图像偏好学习 / 排序学习"中的至少一种，以及多模态大模型路线中的一种。我们全部四条都做了调研，并在系统中各取所长；其中<strong>偏好学习</strong>与<strong>排序学习</strong>是方法主干，<strong>美学评价</strong>提供单图质量证据，<strong>图像编辑</strong>负责候选生成与预处理，<strong>多模态大模型</strong>负责语义复核与理由生成。</p>
+<h3>2.1 图像美学评价（Image Aesthetic Assessment, IAA）</h3>
+<p><strong>发展脉络</strong>可以概括为三代：</p>
+<ol>
+<li><strong>手工特征 + 浅层分类器</strong>（2004—2012）。Datta 等（ECCV 2006）提取 56 维低层与高层特征后用 SVM/CART 判断"专业摄影还是随手拍"；Ke 等（CVPR 2006）用颜色、清晰度、构图等 7 维特征做朴素贝叶斯。这一代奠定了"美学可计算"的信念，但特征靠直觉设计，泛化弱。</li>
+<li><strong>CNN 回归 / 分布回归</strong>（2014—2020）。NIMA（Talebi &amp; Milanfar, TIP 2018）的关键改进不是网络，而是<strong>输出形式</strong>：不再回归一个分数，而是预测 10 个 bin 上的打分分布 <span class="imath">p(y| I)</span>，用 EMD 损失训练，最终取期望 <span class="imath">y=Σ<sub>k=1</sub><sup>10</sup>k p<sub>k</sub></span>，方差 <span class="imath">σ<sup>2</sup>=Σ<sub>k</sub> (k- y)<sup>2</sup>p<sub>k</sub></span> 反映"人群意见分歧"。对本任务这是有用的副产品——分歧小的图通常构图更干净、更"无争议"。同期 AADB（Kong et al., ECCV 2016）把美学拆成 11 个可解释属性并引入排序损失，提示我们"属性化"能提升可解释性。</li>
+<li><strong>多尺度 Transformer / 视觉-语言预训练</strong>（2021— ）。MUSIQ（Ke et al., ICCV 2021）用多尺度 patch 处理原始分辨率图像，缓解缩放导致的质量信息损失；CLIP-IQA（Wang et al., 2023）用 "Good photo." / "Bad photo." 的文本嵌入相似度差做无参考质量评价，零样本可用；LAION-Aesthetic 则在 CLIP 特征上训一个线性头，成为生成模型筛图的事实标准。</li>
+</ol>
+<p><strong>数据集</strong>：AVA（255k 张，1~10 分分布，66 类语义 + 14 种摄影风格）是训练标配；TAD66K（66k 张，按主题划分）用于检验跨主题泛化；AADB（10k 张，5 人打分 + 属性）适合属性级分析；SPAQ（11k 张手机拍摄）最接近"随手拍"域。</p>
+<p><strong>在系统中的角色</strong>：作为 <span class="imath">φ</span> 中的 <code>aesthetic</code> 维度，以及 NIMA 方差作为"争议度"惩罚项。<strong>局限</strong>：训练集以专业摄影师作品为主（AVA 的已知 bias），对本任务常见的"日常生活随拍"存在域偏移，因此不能单独决定排序。</p>
+<h3>2.2 图像编辑（Image Editing）</h3>
+<p>与选片最相关的编辑是<strong>构图编辑（裁剪）</strong>：</p>
+<ul>
+<li><strong>候选框排序</strong>：VFN（Chen et al., 2017）用大量"构图好/坏"图对训练打分网络，再对候选裁剪框排序；GAIC（Zeng et al., ECCV 2019）用弱监督（仅需原图的美学标签）学习裁剪，避免昂贵的裁剪标注。</li>
+<li><strong>强化学习裁剪</strong>：把裁剪建模为序列决策（缩放/平移），在美学奖励下搜索，能跳出滑窗的离散网格。</li>
+<li><strong>生成式编辑</strong>：outpainting / InstructPix2Pix 可以补全被裁掉的边缘，但引入生成伪影，赛事评审场景下我们暂不采用，只作为后续探索。</li>
+<li><strong>画质编辑</strong>：HDRNet（Gharbi et al., SIGGRAPH 2017）的局部色调映射、UPE（Wang et al., TPAMI 2022）的无监督曝光校正，可以作为<strong>预处理</strong>，把一组照片的曝光拉齐，避免"最亮的赢"这种虚假信号。</li>
+</ul>
+<p><strong>在系统中的角色</strong>：①候选取景框的生成方式直接继承裁剪文献（多宽高比 + 多尺度 + 显著性引导）；②可选预处理模块做曝光归一化。<strong>取舍</strong>：我们没有做生成式外扩，因为选片任务的输出应是"这张照片里最好的一框"，而不是"一张新照片"。</p>
+<h3>2.3 图像偏好学习（Image Preference Learning）</h3>
+<p>这是与本任务最贴合的路线。</p>
+<ul>
+<li><strong>ATF（Chang et al., SIGGRAPH 2016）</strong>：论文构建了 15,545 张 / 5,953 组连拍 + 组内成对偏好的基准，明确指出"绝对质量度量在同组内失效"，转而学习<strong>组内相对质量</strong>。方法上比较了成对 CNN（siamese 结构）、手工特征 + 随机森林等，最终用组内排序精度评测。这是我们最重要的参考工作。</li>
+<li><strong>Bradley-Terry / Thurstone 模型</strong>：把"<span class="imath">A</span> 优于 <span class="imath">B</span>"的概率写成 <span class="imath">P(A≻ B)=σ(w<sup>ᵀ</sup>(φ<sub>A</sub>-φ<sub>B</sub>))</span>，成对比较的似然可直接最大化。它的好处是<strong>不需要绝对标注</strong>，且天然适配"组内比较"的采集方式。</li>
+<li><strong>从 RLHF 借来的经验</strong>：奖励模型（reward model）本质上就是一个 Bradley-Terry 模型；DPO 则进一步绕开显式奖励。这说明"成对偏好 → 标量效用"的范式在大规模实践中已被验证。</li>
+</ul>
+<p><strong>在系统中的角色</strong>：训练目标就是 BT 似然；标注协议也按"成对/排序"设计，而不是"打 1~10 分"。</p>
+<h3>2.4 排序学习（Learning to Rank）</h3>
+<ul>
+<li><strong>pointwise</strong>：把每个候选项当独立回归问题（即普通美学打分）；</li>
+<li><strong>pairwise</strong>：RankNet（Burges et al., 2005）用交叉熵优化成对顺序，后续 LambdaRank / LambdaMART 直接把 NDCG 的梯度加权进损失；</li>
+<li><strong>listwise</strong>：ListNet / ListMLE 直接建模整个排序的分布，理论上更贴合"一组内选一个"的场景，但对标注完整性要求高。</li>
+</ul>
+<p><strong>在系统中的角色</strong>：我们用 pairwise（BT）作为主训练目标——它对标注最友好（只需"A 比 B 好"），且在小组（5~20 张）上样本量足够（一组 8 张即 28 个成对样本）。评测指标同时报告 pairwise accuracy、Top-1 命中率、NDCG@3 与 Kendall <span class="imath">τ</span>，其中 <strong>NDCG@3</strong> 最贴近真实使用（人只看前 3 张）。</p>
+<h3>2.5 多模态大模型（MLLM）</h3>
+<p>GPT-4o、Qwen2.5-VL、InternVL2.5、GLM-4V 这一类模型带来了三种新能力：</p>
+<ol>
+<li><strong>零样本 + 指令化评分细则</strong>：可以把"三分法、主体完整、曝光、瞬间"写进 prompt，模型按细则打分，省去训练；</li>
+<li><strong>语义判断</strong>：识别"闭眼""表情崩了""背景有人抢镜""主体被切"这类低层特征无法表达的问题；</li>
+<li><strong>可解释输出</strong>：直接给出自然语言理由，这正是选片系统最需要的人机接口。</li>
+</ol>
+<p><strong>已知问题</strong>（直接影响工程实现）：</p>
+<ul>
+<li><strong>位置与分辨率偏差</strong>：同一张图缩放、平移后打分可能变化 0.5 分以上，甚至对"裁剪框在图中位置"敏感；</li>
+<li><strong>分数饱和</strong>：直接问"几分"时，模型倾向于给 7~8 分，区分度差；用<strong>组内两两比较</strong>提问明显更可靠；</li>
+<li><strong>基准表现有限</strong>：AesBench（2024）、Q-Bench 等基准显示，MLLM 的美学判断与人类偏好的相关性仍低于专门训练的 IAA 模型，但在"语义合理性"上明显更强。</li>
+</ul>
+<p><strong>在系统中的角色</strong>：<strong>级联第二阶段</strong>——只对规则筛出的 Top-3 做 VLM 复评，权重占 25%，同时把它的理由作为解释的一部分。这样每次选片只需 3 次 API 调用，成本可控。</p>
+<h3>2.6 方法对比与选型</h3>
+<table>
+<thead>
+<tr>
+<th>路线</th>
+<th>代表工作</th>
+<th>优点</th>
+<th>局限</th>
+<th>本项目用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>美学评价</td>
+<td>NIMA, MUSIQ, CLIP-IQA</td>
+<td>单图质量判断成熟、有开源权重</td>
+<td>绝对分数、组内趋同、域偏移</td>
+<td>提供 <code>aesthetic</code> 维度 + 争议度</td>
+</tr>
+<tr>
+<td>图像编辑（裁剪）</td>
+<td>VFN, GAIC, RL-Crop</td>
+<td>直接产出候选框、可解释</td>
+<td>多为单图、忽略组内上下文</td>
+<td>候选生成 + 曝光预处理</td>
+</tr>
+<tr>
+<td>偏好学习</td>
+<td>ATF, Bradley-Terry, RLHF RM</td>
+<td>直接优化"人更喜欢哪个"</td>
+<td>需要成对标注</td>
+<td><strong>主训练目标</strong></td>
+</tr>
+<tr>
+<td>排序学习</td>
+<td>RankNet, LambdaRank, ListNet</td>
+<td>有成熟指标与损失</td>
+<td>listwise 标注成本高</td>
+<td>组内排序与评测</td>
+</tr>
+<tr>
+<td>多模态大模型</td>
+<td>GPT-4o, Qwen2.5-VL</td>
+<td>语义强、可解释、零样本</td>
+<td>贵、位置/分辨率偏差、分数饱和</td>
+<td>决赛复评 + 理由生成</td>
+</tr>
+</tbody>
+</table>
+<p><strong>选型结论</strong>：以"规则特征 + 美学模型"做召回与初筛，以"成对偏好学习"做组内排序，以"多模态大模型"做语义复核与解释。这是一个精度、成本、可解释性三者平衡的组合，也避免了对单一模型的过度依赖。</p>
+<hr />
+<h2>3 初步系统方案</h2>
+<h3>3.1 总体架构</h3>
+<p><svg xmlns="http://www.w3.org/2000/svg" width="720" height="676" viewBox="0 0 720 676" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/></marker></defs>
+<rect x="0" y="0" width="720" height="676" fill="#ffffff"/>
+<rect x="40" y="16" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="46" text-anchor="middle" font-size="13.5" fill="#1f2937">一组同场景照片</text>
+<rect x="40" y="112" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="142" text-anchor="middle" font-size="13.5" fill="#1f2937">预处理：EXIF 校正 / 长边归一化 / 去重</text>
+<rect x="40" y="208" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="238" text-anchor="middle" font-size="13.5" fill="#1f2937">候选取景框生成（三路合成 + NMS）</text>
+<rect x="40" y="304" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="334" text-anchor="middle" font-size="13.5" fill="#1f2937">候选评价：多路打分器</text>
+<rect x="40" y="400" width="270" height="52" rx="9" fill="#f8fafc" stroke="#b45309" stroke-width="1.4"/>
+<text x="175" y="430" text-anchor="middle" font-size="13.5" fill="#b45309">组内相对化 + 加权融合</text>
+<rect x="40" y="496" width="270" height="52" rx="9" fill="#f8fafc" stroke="#b45309" stroke-width="1.4"/>
+<text x="175" y="526" text-anchor="middle" font-size="13.5" fill="#b45309">Bradley-Terry / 偏好排序</text>
+<rect x="40" y="592" width="270" height="52" rx="9" fill="#f8fafc" stroke="#065f46" stroke-width="1.4"/>
+<text x="175" y="622" text-anchor="middle" font-size="13.5" fill="#065f46">输出：最佳照片 + 最佳取景框 + 理由</text>
+<line x1="175" y1="68" x2="175" y2="108" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="164" x2="175" y2="204" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="260" x2="175" y2="300" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="356" x2="175" y2="396" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="452" x2="175" y2="492" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="548" x2="175" y2="588" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="352" y="166" width="330" height="28" rx="6" fill="#eef6ff" stroke="#93c5fd"/>
+<text x="364" y="185" font-size="12" fill="#1e3a8a">① 整图基线（不裁剪）</text>
+<rect x="352" y="204" width="330" height="28" rx="6" fill="#eef6ff" stroke="#93c5fd"/>
+<text x="364" y="223" font-size="12" fill="#1e3a8a">② 网格滑窗：7 种宽高比 × 4 档面积</text>
+<rect x="352" y="242" width="330" height="28" rx="6" fill="#eef6ff" stroke="#93c5fd"/>
+<text x="364" y="261" font-size="12" fill="#1e3a8a">③ 构图锚定：三分点 / 中心反解</text>
+<path d="M310,234 C332,234 332,180 352,180" stroke="#93c5fd" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<rect x="352" y="292" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="311" font-size="12" fill="#4c1d95">技术质量：锐度 / 曝光 / 噪声 / 色彩</text>
+<rect x="352" y="330" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="349" font-size="12" fill="#4c1d95">美学模型：NIMA / CLIP-IQA</text>
+<rect x="352" y="368" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="387" font-size="12" fill="#4c1d95">构图规则：三分 / 留白 / 平衡 / 水平</text>
+<rect x="352" y="406" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="425" font-size="12" fill="#4c1d95">多模态大模型：语义与瞬间</text>
+<path d="M310,330 C332,330 332,306 352,306" stroke="#c4b5fd" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<text x="352" y="474" font-size="11.5" fill="#6b7280">第一阶段：图内选最优框（绝对）</text>
+<text x="352" y="492" font-size="11.5" fill="#6b7280">第二阶段：组内 z-score 后比较（相对）</text>
+<rect x="348" y="458" width="252" height="46" rx="6" fill="none" stroke="#e5e7eb" stroke-dasharray="4 3"/>
+</svg></p>
+<p>两个关键点值得单独说明：</p>
+<ul>
+<li><strong>为什么分两阶段</strong>：候选框的绝对好坏（构图是否规整）与照片间的相对好坏（哪张更清楚）是两种不同尺度的判断。若把两者混在一个归一化空间里，候选框数量的差异会稀释照片间的真实差异——我们第一版就踩了这个坑（见 §5.3）。</li>
+<li><strong>为什么强调组内标准化</strong>：这是把"绝对美学分"变成"相对偏好"的开关，也是本方案与普通美学评分器最本质的区别。</li>
+</ul>
+<h3>3.2 候选取景区域如何生成</h3>
+<p>候选生成的目标是"用几十个框覆盖住人可能选的那些框"，而不是穷举。我们采用三路合成：</p>
+<p><strong>(1) 整图基线。</strong> 相当于"不裁剪"，保证系统永远有一个安全解，也避免"为了构图把主体裁掉"的失败模式。</p>
+<p><strong>(2) 网格滑窗。</strong> 对每个宽高比 <span class="imath">a∈&#123;1:1,4:3,3:4,3:2,2:3,16:9,9:16&#125;</span> 与每个面积比例 <span class="imath">s∈&#123;0.55,0.70,0.85,1.0&#125;</span>，取该比例下能画出的最大内接框，按 <span class="imath">5×5</span> 网格平移。候选数上界为 <span class="imath">| A|×|S|×(G+1)<sup>2</sup>=7×4×25=700</span>，实际经 NMS 后保留 32 个。</p>
+<p><strong>(3) 构图锚定。</strong> 这一步是"把先验直接注入候选集"：把显著性主体分别锚定到 4 个三分点与中心点，反解窗口位置。这样"教科书式构图"的框必然在候选集内，无需指望评价器自己"想出"好构图。这也符合摄影实践——人取景时先看主体落在哪，再决定留多少空间。</p>
+<p><strong>候选打分与去重</strong>：每个候选按</p>
+<div class="formula">prior=0.62·(Σ<sub>p∈ c</sub>sal(p))/(Σ<sub>p</sub> sal(p))+0.26· thirds(c)+0.12·exp(-((√(area(c)/area(I))-0.72)/(0.35))<sup>2</sup>)</div>
+
+<p>排序，再做 IoU <span class="imath">&gt;0.88</span> 的贪心抑制，取前 32 个。三项分别对应"主体在框内""位置合乎构图""面积别太离谱"。</p>
+<p><strong>复杂度</strong>：候选打分用积分图实现，单框 <span class="imath">O(1)</span>，整张图 <span class="imath">O(| A||S|G<sup>2</sup>)</span>，与图像分辨率无关；在 1024 长边下，单图候选生成约 20 ms（CPU，Python）。</p>
+<h3>3.3 每个候选区域如何评价</h3>
+<p>四类评分器，全部输出 <span class="imath">[0,1]</span>，语义可解释：</p>
+<p><strong>① 技术质量</strong>（6 项）</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>实现</th>
+<th>归一化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>锐度</td>
+<td>拉普拉斯响应方差 <span class="imath">Var(∇<sup>2</sup> I)</span></td>
+<td><span class="imath">1-e<sup>-var/0.0015</sup></span></td>
+</tr>
+<tr>
+<td>曝光</td>
+<td>平均亮度偏离 0.45 的程度 + 高光/暗部溢出率</td>
+<td><span class="imath">exp(-( I-0.45)<sup>2</sup>/0.30<sup>2</sup>)-2(clip<sub>hi</sub>+clip<sub>lo</sub>)</span></td>
+</tr>
+<tr>
+<td>对比度</td>
+<td>亮度标准差</td>
+<td><span class="imath">1-e<sup>-σ/0.18</sup></span></td>
+</tr>
+<tr>
+<td>色彩</td>
+<td>Hasler-Süsstrunk colorfulness</td>
+<td><span class="imath">C/65</span></td>
+</tr>
+<tr>
+<td>噪声</td>
+<td>Immerkær 快速估计</td>
+<td><span class="imath">1-σ/0.06</span></td>
+</tr>
+<tr>
+<td>信息量</td>
+<td>亮度直方图熵</td>
+<td><span class="imath">H/log<sub>2</sub> 32</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>② 美学模型</strong>。优先使用 CLIP 线性美学头（LAION-Aesthetic 风格），退化时用 CLIP-IQA 提示词法，再退化到规则式美学分 <span class="imath">0.42 q+0.30 c+0.18 color+0.10 subject</span>。三级降级保证任何环境下都能跑。</p>
+<p><strong>③ 构图规则</strong>（10 项）。三分/居中、主体完整度（主体包围盒落在框内的比例）、留白（主体到框边的最小距离）、主体占比、左右与上下显著性平衡、左右对称性、边缘杂乱度、地平线倾斜。其中<strong>主体完整度</strong>是最重要的失败模式护栏——它专门惩罚"把脑袋裁掉"的框。</p>
+<p><strong>④ 多模态大模型</strong>。对候选框用固定 rubric 提问（清晰度/曝光/构图/瞬间/综合），CoT 后输出 JSON，并要求与"普通手机随手拍 = 5 分"这个锚点比较，以缓解分数饱和。</p>
+<h3>3.4 最终如何选择最优取景框</h3>
+<p><strong>(1) 第一阶段——图内选框。</strong> 对每张图的候选集做绝对加权：</p>
+<div class="formula">u(c)=σ(4· (Σ<sub>k</sub> w<sub>k</sub> φ<sub>k</sub>(c))/(Σ<sub>k</sub> w<sub>k</sub>)-2),</div>
+
+<p>取最大者作为该照片的代表框。这一步的"绝对"是刻意的：构图规整度本来就是绝对概念。</p>
+<p><strong>(2) 第二阶段——组内排序。</strong> 对 <span class="imath">n</span> 张照片的代表框特征做<strong>组内 z-score</strong>：</p>
+<div class="formula">φ<sub>ik</sub>=(φ<sub>ik</sub>-μ<sub>k</sub>)/(σ<sub>k</sub>), μ<sub>k</sub>=(1)/(n)Σ<sub>i</sub> φ<sub>ik</sub>,</div>
+
+<p>再做加权融合得到效用 <span class="imath">U<sub>i</sub></span> 并排序。组内标准化消除了"这台手机拍出来整体偏暗"之类的场景级偏移，让模型只在<strong>组内差异</strong>上做判断。</p>
+<p><strong>(3) 权重怎么来。</strong> 冷启动用摄影经验赋权（质量 0.30 / 美学 0.26 / 构图 0.30 / 主体 0.14）；有标注后用 Bradley-Terry 从成对偏好中学习：</p>
+<div class="formula">L(w)=-Σ<sub>(a≻ b)</sub>logσ(w<sup>ᵀ</sup>(φ<sub>a</sub>-φ<sub>b</sub>))+λ‖w‖<sub>2</sub><sup>2</sup> .</div>
+
+<p>学到的权重绝对值排序本身就是一份"人到底在意什么"的答案，可直接写进答辩。</p>
+<p><strong>(4) 级联复核。</strong> 对 Top-3 调用多模态大模型，最终效用 <span class="imath">U'=(1-β)U+β U<sub>VLM</sub></span>，<span class="imath">β=0.25</span>。模型给出的理由与规则描述拼在一起，形成"模型判断 + 规则佐证"的双通道解释。</p>
+<p><strong>(5) 输出。</strong> 排名、最佳框（原图坐标）、各维分数、理由、Top-K 备选，全部写入 JSON，便于复现与展示。</p>
+<h3>3.5 关键设计取舍</h3>
+<table>
+<thead>
+<tr>
+<th>决策</th>
+<th>选择</th>
+<th>理由</th>
+<th>放弃的方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>任务建模</td>
+<td>组内相对排序</td>
+<td>绝对分数在同组内不可分</td>
+<td>单图美学回归后排序</td>
+</tr>
+<tr>
+<td>候选生成</td>
+<td>先验注入 + 滑窗</td>
+<td>保证好框在候选集内，可解释</td>
+<td>纯强化学习搜索（慢、不可解释）</td>
+</tr>
+<tr>
+<td>评价</td>
+<td>多路证据 + 学习融合</td>
+<td>单一模型都有明显偏置</td>
+<td>端到端大模型打分</td>
+</tr>
+<tr>
+<td>排序</td>
+<td>Bradley-Terry</td>
+<td>标注成本最低、样本效率高</td>
+<td>ListNet（需完整排序标注）</td>
+</tr>
+<tr>
+<td>解释</td>
+<td>规则 + VLM 双通道</td>
+<td>规则永远说得清，VLM 补语义</td>
+<td>只靠 VLM（幻觉风险）</td>
+</tr>
+<tr>
+<td>成本</td>
+<td>级联</td>
+<td>一组 10 张只调 3 次 API</td>
+<td>全量 VLM（贵且慢）</td>
+</tr>
+</tbody>
+</table>
+<h3>3.6 复杂度与端侧可行性</h3>
+<p>设一组 <span class="imath">n</span> 张图，单图候选数 <span class="imath">K=32</span>，长边 <span class="imath">L=1024</span>。</p>
+<ul>
+<li>候选生成：<span class="imath">O(n K<sub>grid</sub>)</span>，与分辨率无关，实测约 20 ms/图；</li>
+<li>特征计算：主要在长边 1024、必要时再降采样，约 60 ms/图；</li>
+<li>融合排序：<span class="imath">O(nK)</span>，可忽略；</li>
+<li>VLM 复核：3 次网络调用，约 2~4 s（可选）。</li>
+</ul>
+<p><strong>纯本地方案一组 10 张约 1.5 s（单核 CPU）</strong>，可以做成手机端"拍完立刻给建议"的形态；开启 VLM 后约 5 s，适合在相册整理场景离线跑。</p>
+<hr />
+<h2>4 数据与实验计划</h2>
+<h3>4.1 使用什么图像数据</h3>
+<p><strong>公开数据（用于预训练与横向对比）</strong></p>
+<table>
+<thead>
+<tr>
+<th>数据集</th>
+<th>规模</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ATF Photo Series (SIGGRAPH 2016)</td>
+<td>15,545 张 / 5,953 组</td>
+<td>与本任务同构的组内偏好基准，作为主对比</td>
+</tr>
+<tr>
+<td>AVA</td>
+<td>255,530 张</td>
+<td>训练/微调 NIMA 美学头</td>
+</tr>
+<tr>
+<td>TAD66K</td>
+<td>66,000 张</td>
+<td>检验跨主题泛化</td>
+</tr>
+<tr>
+<td>SPAQ</td>
+<td>11,125 张</td>
+<td>检验手机随手拍的域偏移</td>
+</tr>
+</tbody>
+</table>
+<p><strong>自建 SeriesSet（主力评测集）</strong></p>
+<p>公开数据集中"同一场景连续拍摄"的组很少，也不含我们的校园/街拍场景，因此自建：</p>
+<ul>
+<li><strong>规模</strong>：≥ 30 组，每组 5~20 张，总计 ≥ 300 张；</li>
+<li><strong>设备</strong>：≥ 2 台手机 + 1 台相机，覆盖不同厂商的色调风格；</li>
+<li><strong>场景配比</strong>：人像 8 组、风光 8 组、街拍 8 组、静物/食物 6 组；</li>
+<li><strong>变量控制</strong>：每组刻意包含构图偏移、曝光抖动、轻微失焦、主体移动，与真实连拍一致；</li>
+<li><strong>合规</strong>：人像需被摄者同意，入库前统一剥离 GPS 等 EXIF 隐私字段。</li>
+</ul>
+<h3>4.2 如何收集数据、是否需要人工标注</h3>
+<p><strong>需要，而且标注质量决定上限。</strong> 我们的标注协议：</p>
+<ol>
+<li><strong>标注形式</strong>：对每组给出<strong>完整排序</strong>（1 = 最值得保留），而不是打 1~10 分。理由是排序更稳、更省力，且直接对应训练目标；</li>
+<li><strong>冗余</strong>：至少 2 人独立标注，计算 Kendall <span class="imath">τ</span> 与 Cohen's <span class="imath"></span>；<span class="imath">τ&lt;0.6</span> 的组进入第三人仲裁；</li>
+<li><strong>噪声估计</strong>：随机抽 20% 的组做重复标注（同一人隔 3 天再标），得到标注噪声上界，用于判断模型是否已经"到顶"；</li>
+<li><strong>工具</strong>：自研零依赖标注台 <code>tools/label_tool.py</code>（本地 HTTP 服务，浏览器点选名次即可，输出即训练格式），已随仓库提供。相比部署 Label Studio，节省了大量环境配置时间。</li>
+</ol>
+<p><strong>弱标注补充</strong>：对公开数据集，可从社区行为（收藏数/点赞数）构造弱偏好对，用于预训练，再由小规模人工标注微调——这是 RLHF 里成熟的"预训练奖励模型 + 人工精标"范式。</p>
+<h3>4.3 评价指标</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>定义</th>
+<th>为什么用它</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Top-1 命中率</td>
+<td>系统首选 == 人工首选</td>
+<td>最直观，直接对应"选对了没有"</td>
+</tr>
+<tr>
+<td>Pairwise Acc</td>
+<td>随机取一对，系统排序与人工一致的比例</td>
+<td>对标注噪声最鲁棒，ATF 也用这个</td>
+</tr>
+<tr>
+<td>NDCG@3</td>
+<td>前 3 名按相关度加权的折扣增益</td>
+<td>贴近真实使用（人只看前 3 张）</td>
+</tr>
+<tr>
+<td>Kendall <span class="imath">τ</span></td>
+<td>完整排序与人工排序的一致性</td>
+<td>衡量整体排序质量</td>
+</tr>
+</tbody>
+</table>
+<p>同时报告<strong>人类上限</strong>（不同标注员之间的 <span class="imath">τ</span>），避免把"人都没共识"的组算成模型错误。</p>
+<h3>4.4 实验计划</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>实验</th>
+<th>目的</th>
+<th>对比对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E1</td>
+<td>基线：绝对美学分直接排序</td>
+<td>复现"绝对分数失效"</td>
+<td>NIMA / CLIP-IQA / 规则分</td>
+</tr>
+<tr>
+<td>E2</td>
+<td>+ 组内标准化</td>
+<td>验证相对化的收益</td>
+<td>E1</td>
+</tr>
+<tr>
+<td>E3</td>
+<td>+ 构图特征</td>
+<td>验证构图先验的作用</td>
+<td>E2</td>
+</tr>
+<tr>
+<td>E4</td>
+<td>+ 候选取景框（本文完整方案）</td>
+<td>验证"选框"是否比"选图"更好</td>
+<td>E3</td>
+</tr>
+<tr>
+<td>E5</td>
+<td>+ VLM 级联复评</td>
+<td>验证语义复核的边际收益</td>
+<td>E4</td>
+</tr>
+<tr>
+<td>E6</td>
+<td>消融：候选数量 <span class="imath">K</span>、网格密度 <span class="imath">G</span>、融合权重</td>
+<td>找性价比拐点</td>
+<td>网格搜索</td>
+</tr>
+<tr>
+<td>E7</td>
+<td>跨域：训练用 AVA，测试用自建 SeriesSet</td>
+<td>检验域偏移</td>
+<td>域内 vs 跨域</td>
+</tr>
+</tbody>
+</table>
+<p><strong>预期结论</strong>（待验证）：E1→E2 应有最大跃升（这是方法的核心假设）；E4 的增益取决于组内构图差异；E5 主要在含人物表情的组上有明显提升。</p>
+<h3>4.5 时间计划与分工</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>时间</th>
+<th>任务</th>
+<th>负责人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>期中（已完成）</td>
+<td>10/20—11/03</td>
+<td>调研、方案设计、原型跑通、仓库搭建</td>
+<td>全员</td>
+</tr>
+<tr>
+<td>M1 数据</td>
+<td>11/04—11/17</td>
+<td>采集 ≥ 30 组、标注协议落地、标注完成</td>
+<td>张满（采集）＋章丞轩（标注工具与质检）</td>
+</tr>
+<tr>
+<td>M2 模型</td>
+<td>11/11—11/24</td>
+<td>接入 NIMA / CLIP 美学头，跑 E1~E3</td>
+<td>蒋锦宏</td>
+</tr>
+<tr>
+<td>M3 排序</td>
+<td>11/18—12/01</td>
+<td>BT 训练、权重分析、E4~E6 消融</td>
+<td>蒋锦宏＋章丞轩</td>
+</tr>
+<tr>
+<td>M4 系统</td>
+<td>11/25—12/08</td>
+<td>Gradio 演示、端侧性能优化、VLM 级联</td>
+<td>张满</td>
+</tr>
+<tr>
+<td>M5 交付</td>
+<td>12/09—12/20</td>
+<td>报告、答辩材料、Demo 视频、代码整理</td>
+<td>全员</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>5 工程实现与初步验证</h2>
+<h3>5.1 已实现内容</h3>
+<p>仓库 <code>framepick/</code> 已是一个可运行的原型，<strong>只依赖 numpy 与 Pillow</strong> 即可跑通全链路（深度模型为可选增强）：</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>文件</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谱残差显著性</td>
+<td><code>src/framepick/saliency.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>候选生成 + NMS</td>
+<td><code>src/framepick/candidates.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>技术质量 / 构图特征</td>
+<td><code>src/framepick/features.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>融合与组内标准化</td>
+<td><code>src/framepick/fusion.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Bradley-Terry 排序器</td>
+<td><code>src/framepick/ranker.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>端到端流水线</td>
+<td><code>src/framepick/pipeline.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>评分器适配器</td>
+<td><code>src/framepick/scorers/</code></td>
+<td>🚧 NIMA / CLIP / VLM 已写，待接权重与 Key</td>
+</tr>
+<tr>
+<td>标注工具</td>
+<td><code>tools/label_tool.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Gradio 演示</td>
+<td><code>app/gradio_app.py</code></td>
+<td>✅</td>
+</tr>
+<tr>
+<td>单元测试</td>
+<td><code>tests/test_pipeline.py</code></td>
+<td>✅ 8 项全通过</td>
+</tr>
+</tbody>
+</table>
+<h3>5.2 合成数据上的初步验证</h3>
+<p>由于真实连拍数据仍在采集中，我们先构造了一组合成"连拍"做冒烟测试：同一背景（天空/山脊/草地/小路），主体位置、曝光、模糊强度按预设扰动，并记录"人工首选"作为 ground truth。</p>
+<p>运行：</p>
+<pre><code class="language-bash">python scripts/make_demo_data.py          # 生成 2 组 × 8 张
+python scripts/run_demo.py --all          # 跑流水线并出拼图
+</code></pre>
+<p>结果（series_01）：</p>
+<table>
+<thead>
+<tr>
+<th>名次</th>
+<th>文件</th>
+<th>效用</th>
+<th>质量</th>
+<th>美学</th>
+<th>构图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>IMG_001.jpg</td>
+<td>0.721</td>
+<td>0.71</td>
+<td>0.57</td>
+<td>0.71</td>
+</tr>
+<tr>
+<td>2</td>
+<td>IMG_003.jpg</td>
+<td>0.607</td>
+<td>0.61</td>
+<td>0.53</td>
+<td>0.73</td>
+</tr>
+<tr>
+<td>3</td>
+<td>IMG_002.jpg</td>
+<td>0.582</td>
+<td>0.60</td>
+<td>0.52</td>
+<td>0.74</td>
+</tr>
+<tr>
+<td>4</td>
+<td>IMG_005.jpg</td>
+<td>0.568</td>
+<td>0.64</td>
+<td>0.53</td>
+<td>0.72</td>
+</tr>
+<tr>
+<td>5</td>
+<td>IMG_008.jpg</td>
+<td>0.474</td>
+<td>0.57</td>
+<td>0.50</td>
+<td>0.76</td>
+</tr>
+<tr>
+<td>6</td>
+<td>IMG_004.jpg</td>
+<td>0.453</td>
+<td>0.57</td>
+<td>0.50</td>
+<td>0.72</td>
+</tr>
+<tr>
+<td>7</td>
+<td>IMG_006.jpg</td>
+<td>0.357</td>
+<td>0.52</td>
+<td>0.48</td>
+<td>0.74</td>
+</tr>
+<tr>
+<td>8</td>
+<td>IMG_007.jpg</td>
+<td>0.252</td>
+<td>0.56</td>
+<td>0.47</td>
+<td>0.64</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Top-1 命中率 2/2</strong>。系统给出的理由示例：</p>
+<blockquote>
+<p>组内最优：主体居中、画面稳定，焦点锐利，曝光正常，主体完整未被裁断。</p>
+</blockquote>
+<p>值得注意的是效用的<strong>区分度</strong>：最好与最差相差 0.47，而原始美学分只差 0.10——这正是组内标准化在起作用。</p>
+<h3>5.3 踩过的坑（写进报告，避免答辩被问倒）</h3>
+<ol>
+<li><strong>归一化空间混用</strong>：第一版把所有照片的所有候选框放进同一个标准化空间，结果候选多的照片把组内方差撑大，照片间真实差异被稀释，Top-1 命中率只有 0/2。改成两阶段后恢复正常。</li>
+<li><strong>显著性阈值用绝对值</strong>：谱残差图的幅度随图像内容变化极大，固定阈值 0.55 会把整幅图框成"主体"，导致"主体完整度"指标恒为 1、失去区分能力。改为相对峰值 0.78× 后解决。</li>
+<li><strong>坐标系不一致</strong>：裁剪框在 1024 长边的工作图上算，可视化时却按 900 长边加载原图，框会整体偏移 13%。现在所有坐标都带 <code>scale</code> 显式换算。</li>
+<li><strong>美学分饱和</strong>：规则式美学分把构图、质量混在一起，压缩到 0.45~0.57 的窄带，排序靠噪点决定。后续接入 NIMA 分布输出后，应改用期望 + 方差两个维度。</li>
+</ol>
+<hr />
+<h2>6 风险与对策</h2>
+<table>
+<thead>
+<tr>
+<th>风险</th>
+<th>影响</th>
+<th>对策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>自建数据量不足（&lt;300 张）</td>
+<td>训练权重不可靠</td>
+<td>用 ATF 公开基准做预训练，自建数据只做微调与评测；优先保证组数而非张数</td>
+</tr>
+<tr>
+<td>标注一致性低（<span class="imath">τ&lt;0.6</span>）</td>
+<td>评测失真</td>
+<td>引入仲裁与"人类上限"基线；对小差异组降低权重</td>
+</tr>
+<tr>
+<td>美学模型不可用（无 GPU/无权重）</td>
+<td>精度下降</td>
+<td>三级降级机制已实现，最差也能用规则特征跑通</td>
+</tr>
+<tr>
+<td>VLM 接口不稳定/费用</td>
+<td>演示失败</td>
+<td>级联 + 缓存 + 超时降级；答辩现场提供离线结果</td>
+</tr>
+<tr>
+<td>手机端性能不达标</td>
+<td>无法演示端侧</td>
+<td>候选生成已与分辨率解耦；必要时把特征计算降到 720p 长边</td>
+</tr>
+<tr>
+<td>过度依赖构图规则</td>
+<td>风格化作品被误杀</td>
+<td>规则分只做加权项而非硬约束；引入属性化解耦（分离"技术"与"审美"）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>7 团队分工</h2>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>学号</th>
+<th>期中阶段承担</th>
+<th>后续主责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>蒋锦宏（组长）</td>
+<td>202493006</td>
+<td>任务定义、方法调研、系统架构、流水线与排序器实现、报告统稿</td>
+<td>模型与排序（M2/M3）</td>
+</tr>
+<tr>
+<td>张满</td>
+<td>202493002</td>
+<td>数据方案设计、合成演示数据、可视化与联系表、Gradio 界面</td>
+<td>数据采集与系统优化（M1/M4）</td>
+</tr>
+<tr>
+<td>章丞轩</td>
+<td>202493001</td>
+<td>标注协议、标注工具开发、特征与指标核验、单元测试</td>
+<td>标注质检与消融实验（M1/M3）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>8 参考文献</h2>
+<ol>
+<li>Chang H., Yu F., Wang J., Ashley D., Finkelstein A. <em>Automatic Triage for a Photo Series.</em> ACM TOG (SIGGRAPH), 35(4), 2016.</li>
+<li>Talebi H., Milanfar P. <em>NIMA: Neural Image Assessment.</em> IEEE TIP, 27(8), 2018.</li>
+<li>Murray N., Marchesotti L., Perronnin F. <em>AVA: A Large-Scale Database for Aesthetic Visual Analysis.</em> CVPR 2012.</li>
+<li>Kong S., Shen X., Lin Z., Mech R., Finkelstein A. <em>Photo Aesthetics Ranking Network with Attributes and Content Adaptation.</em> ECCV 2016.</li>
+<li>Ke J., Wang Q., Wang Y., Milanfar P., Yang F. <em>MUSIQ: Multi-scale Image Quality Transformer.</em> ICCV 2021.</li>
+<li>Wang J., Chan K. C. K., Loy C. C. <em>Exploring CLIP for Assessing the Look and Feel of Images (CLIP-IQA).</em> AAAI 2023.</li>
+<li>He S., Zhang Y., Xie R., et al. <em>Rethinking Image Aesthetics Assessment: Models, Datasets and Benchmarks (TAD66K).</em> IJCAI 2022.</li>
+<li>Fang Y., Zhu H., Zeng Y., Ma K., Wang Z. <em>Perceptual Quality Assessment of Smartphone Photography (SPAQ).</em> CVPR 2020.</li>
+<li>Chen Y.-L., Huang T.-W., Chang K.-H., Tsai Y.-C., Chen B.-Y., Hung K.-L. <em>Quantitative Analysis of Automatic Image Cropping Algorithms: A Dataset and Comparative Study.</em> WACV 2017.</li>
+<li>Zeng H., Li L., Cao Z., Zhang L. <em>Reliable and Efficient Image Cropping: A Grid Anchor based Approach (GAIC).</em> CVPR 2019.</li>
+<li>Gharbi M., Chen J., Barron J. T., Hasinoff S. W., Durand F. <em>Deep Bilateral Learning for Real-Time Image Enhancement (HDRNet).</em> SIGGRAPH 2017.</li>
+<li>Wang R., Zhang Q., Fu C.-W., et al. <em>Underexposed Photo Enhancement using Deep Illumination Estimation (UPE).</em> CVPR 2019 / TPAMI 2022.</li>
+<li>Burges C., Shaked T., Renshaw E., et al. <em>Learning to Rank using Gradient Descent (RankNet).</em> ICML 2005.</li>
+<li>Burges C. <em>From RankNet to LambdaRank to LambdaMART: An Overview.</em> MSR-TR-2010-82.</li>
+<li>Rafailov R., Sharma A., Mitchell E., et al. <em>Direct Preference Optimization: Your Language Model is Secretly a Reward Model.</em> NeurIPS 2023.</li>
+<li>Huang Y., et al. <em>AesBench: An Expert Benchmark for Multimodal Large Language Models on Image Aesthetics Perception.</em> 2024.</li>
+<li>Hou X., Zhang L. <em>Saliency Detection: A Spectral Residual Approach.</em> CVPR 2007.</li>
+<li>Hasler D., Süsstrunk S. <em>Measuring Colourfulness in Natural Images.</em> SPIE Human Vision and Electronic Imaging, 2003.</li>
+<li>Immerkær J. <em>Fast Noise Variance Estimation.</em> Computer Vision and Image Understanding, 64(2), 1996.</li>
+</ol>
+<hr />
+<h2>附录 A 仓库结构</h2>
+<pre><code>framepick/
+├─ README.md                  项目说明与快速开始
+├─ requirements.txt           最小依赖（numpy + pillow）
+├─ configs/default.json       默认配置
+├─ src/framepick/             核心库
+│   ├─ saliency.py            谱残差显著性
+│   ├─ candidates.py          候选取景框生成
+│   ├─ features.py            技术质量 / 构图特征
+│   ├─ fusion.py              融合与组内标准化
+│   ├─ ranker.py              Bradley-Terry + 指标
+│   ├─ pipeline.py            端到端流水线
+│   ├─ explain.py             可解释性
+│   ├─ visualize.py           联系表输出
+│   ├─ cli.py                 命令行
+│   └─ scorers/               NIMA / CLIP / VLM 适配器
+├─ scripts/                   演示数据、跑通脚本、训练排序器
+├─ app/gradio_app.py          Web 演示
+├─ tools/label_tool.py        零依赖标注台
+├─ tests/                     单元测试
+├─ data/README.md             数据方案说明
+└─ docs/设计报告.md            本报告
+</code></pre>
+<h2>附录 B 复现命令</h2>
+<pre><code class="language-bash">git clone https://github.com/xiaopojiuguan/framepick &amp;&amp; cd framepick
+pip install -r requirements.txt
+
+python scripts/make_demo_data.py      # 生成合成连拍
+python tests/test_pipeline.py         # 8 项单元测试
+python scripts/run_demo.py --all      # 端到端 + 联系表
+python -m framepick.cli --input data/sample/series_01 --out outputs/run01 --sheet
+</code></pre></body></html>

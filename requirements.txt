@@ -1,0 +1,14 @@
+# 最小依赖：跑通"候选生成 + 规则特征 + 融合排序"整条链路
+numpy>=1.23
+pillow>=9.2
+
+# 可选：深度美学模型（NIMA / CLIP-IQA）
+# torch>=2.0
+# torchvision>=0.15
+# transformers>=4.38
+
+# 可选：Web 演示界面
+# gradio>=4.0
+
+# 可选：单元测试
+# pytest>=7.0

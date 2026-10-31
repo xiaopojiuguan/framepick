@@ -1,0 +1,14 @@
+{
+  "work_size": 1024,
+  "min_side": 96,
+  "max_candidates": 32,
+  "grid": 4,
+  "dedup_iou": 0.88,
+  "fusion_mode": "relative",
+  "topk": 3,
+  "use_vlm": false,
+  "vlm_topn": 3,
+  "vlm_weight": 0.25,
+  "dedup_hamming": 6,
+  "verbose": true
+}

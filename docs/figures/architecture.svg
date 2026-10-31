@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="676" viewBox="0 0 720 676" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<defs><marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#4b5563"/></marker></defs>
+<rect x="0" y="0" width="720" height="676" fill="#ffffff"/>
+<rect x="40" y="16" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="46" text-anchor="middle" font-size="13.5" fill="#1f2937">一组同场景照片</text>
+<rect x="40" y="112" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="142" text-anchor="middle" font-size="13.5" fill="#1f2937">预处理：EXIF 校正 / 长边归一化 / 去重</text>
+<rect x="40" y="208" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="238" text-anchor="middle" font-size="13.5" fill="#1f2937">候选取景框生成（三路合成 + NMS）</text>
+<rect x="40" y="304" width="270" height="52" rx="9" fill="#f8fafc" stroke="#1f2937" stroke-width="1.4"/>
+<text x="175" y="334" text-anchor="middle" font-size="13.5" fill="#1f2937">候选评价：多路打分器</text>
+<rect x="40" y="400" width="270" height="52" rx="9" fill="#f8fafc" stroke="#b45309" stroke-width="1.4"/>
+<text x="175" y="430" text-anchor="middle" font-size="13.5" fill="#b45309">组内相对化 + 加权融合</text>
+<rect x="40" y="496" width="270" height="52" rx="9" fill="#f8fafc" stroke="#b45309" stroke-width="1.4"/>
+<text x="175" y="526" text-anchor="middle" font-size="13.5" fill="#b45309">Bradley-Terry / 偏好排序</text>
+<rect x="40" y="592" width="270" height="52" rx="9" fill="#f8fafc" stroke="#065f46" stroke-width="1.4"/>
+<text x="175" y="622" text-anchor="middle" font-size="13.5" fill="#065f46">输出：最佳照片 + 最佳取景框 + 理由</text>
+<line x1="175" y1="68" x2="175" y2="108" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="164" x2="175" y2="204" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="260" x2="175" y2="300" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="356" x2="175" y2="396" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="452" x2="175" y2="492" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<line x1="175" y1="548" x2="175" y2="588" stroke="#4b5563" stroke-width="1.4" marker-end="url(#ar)"/>
+<rect x="352" y="166" width="330" height="28" rx="6" fill="#eef6ff" stroke="#93c5fd"/>
+<text x="364" y="185" font-size="12" fill="#1e3a8a">① 整图基线（不裁剪）</text>
+<rect x="352" y="204" width="330" height="28" rx="6" fill="#eef6ff" stroke="#93c5fd"/>
+<text x="364" y="223" font-size="12" fill="#1e3a8a">② 网格滑窗：7 种宽高比 × 4 档面积</text>
+<rect x="352" y="242" width="330" height="28" rx="6" fill="#eef6ff" stroke="#93c5fd"/>
+<text x="364" y="261" font-size="12" fill="#1e3a8a">③ 构图锚定：三分点 / 中心反解</text>
+<path d="M310,234 C332,234 332,180 352,180" stroke="#93c5fd" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<rect x="352" y="292" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="311" font-size="12" fill="#4c1d95">技术质量：锐度 / 曝光 / 噪声 / 色彩</text>
+<rect x="352" y="330" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="349" font-size="12" fill="#4c1d95">美学模型：NIMA / CLIP-IQA</text>
+<rect x="352" y="368" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="387" font-size="12" fill="#4c1d95">构图规则：三分 / 留白 / 平衡 / 水平</text>
+<rect x="352" y="406" width="330" height="28" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+<text x="364" y="425" font-size="12" fill="#4c1d95">多模态大模型：语义与瞬间</text>
+<path d="M310,330 C332,330 332,306 352,306" stroke="#c4b5fd" stroke-width="1.2" fill="none" stroke-dasharray="4 3"/>
+<text x="352" y="474" font-size="11.5" fill="#6b7280">第一阶段：图内选最优框（绝对）</text>
+<text x="352" y="492" font-size="11.5" fill="#6b7280">第二阶段：组内 z-score 后比较（相对）</text>
+<rect x="348" y="458" width="252" height="46" rx="6" fill="none" stroke="#e5e7eb" stroke-dasharray="4 3"/>
+</svg>

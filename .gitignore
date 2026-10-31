@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# 数据与输出（数据集体积大，不入库；用 data/README.md 说明获取方式）
+data/series/
+data/raw/
+outputs/
+*.csv
+
+# 模型权重
+weights/*.pth
+weights/*.pt
+weights/*.onnx
+weights/*.npz
+
+# 系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
