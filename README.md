@@ -72,6 +72,20 @@ framepick --input data/sample/series_01 --out outputs/run01 --topk 3
 
 ## 4. 效果预览
 
+**真实照片**上的候选框生成与最优裁剪（左：原图 + Top-4 候选框，红为最优；中：谱残差显著性；右：最终裁剪）：
+
+![real candidates](docs/figures/real_candidates.jpg)
+
+以真实照片为底合成的 8 张连拍，走完整流水线后的组内排序（金框为系统选出的 BEST，红框为图内最优取景框）：
+
+![real group](docs/figures/real_group.jpg)
+
+生成这两张图（会缓存照片到 `data/real/`）：
+
+```bash
+python scripts/make_real_figures.py
+```
+
 在合成连拍上跑出来的联系表（红框为算法给出的最优取景框，黄框为 BEST）：
 
 ![demo](docs/figures/demo_series01.jpg)
@@ -104,7 +118,8 @@ framepick/            核心库
   ranker.py           Bradley-Terry 偏好排序 + 评价指标
   pipeline.py         端到端流水线
   cli.py              命令行入口
-scripts/              演示数据、跑通脚本、训练排序器
+scripts/              演示数据、跑通脚本、真实照片配图、训练排序器
+data/real/            真实照片（来自 Lorem Picsum / Unsplash License，可自动下载）
 app/                  Gradio 演示界面
 tools/label_tool.py   本地组内偏好标注小工具（零依赖 HTTP 服务）
 docs/                 设计报告与图表

@@ -250,6 +250,10 @@ blockquote { margin: 10px 0; padding: 9px 14px; background: #fffbeb;
 
 svg { display: block; margin: 14px auto; width: 100%; max-width: 100%; height: auto; }
 img { max-width: 100%; height: auto; }
+.fig { margin: 14px 0 16px; page-break-inside: avoid; }
+.fig img { display: block; width: 100%; border: 1px solid #e5e7eb; border-radius: 4px; }
+.fig .cap { margin-top: 6px; font-size: 8.9pt; color: #4b5563; text-align: center;
+  font-family: "Microsoft YaHei", "Songti SC", sans-serif; line-height: 1.6; }
 """
 
 

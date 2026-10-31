@@ -41,8 +41,16 @@ def draw_crop(rgb: np.ndarray, box: tuple[int, int, int, int], color=(255, 64, 6
     return img
 
 
-def contact_sheet(result, out_path: str | Path, cell: int = 420) -> Path:
-    """按 ranking 顺序画网格：首行标注 BEST，并画出取景框。"""
+def contact_sheet(result, out_path: str | Path, cell: int = 420, theme: str = "dark") -> Path:
+    """按 ranking 顺序画网格：首行标注 BEST，并画出取景框。
+
+    ``theme="light"`` 用于打印/报告（白底深字），``"dark"`` 用于终端预览。
+    """
+    if theme == "light":
+        bg, fg, dim, best_c, box_c = (255, 255, 255), (17, 24, 39), (85, 92, 105), (180, 83, 9), (220, 38, 38)
+    else:
+        bg, fg, dim, best_c, box_c = (18, 18, 22), (235, 235, 235), (210, 210, 210), (255, 200, 60), (255, 90, 90)
+
     items = result.ranking
     n = len(items)
     cols = min(3, n)
@@ -50,7 +58,7 @@ def contact_sheet(result, out_path: str | Path, cell: int = 420) -> Path:
     pad, header = 16, 46
     W = cols * (cell + pad) + pad
     H = rows * (cell + header + pad) + pad
-    canvas = Image.new("RGB", (W, H), (18, 18, 22))
+    canvas = Image.new("RGB", (W, H), bg)
     draw = ImageDraw.Draw(canvas)
     f_title = _font(20)
     f_small = _font(16)
@@ -65,17 +73,17 @@ def contact_sheet(result, out_path: str | Path, cell: int = 420) -> Path:
         tw, th = thumb.size
 
         if i == 0:
-            draw.rectangle([x - 2, y - 2, x + cell + 2, y + header + cell + 2], outline=(255, 200, 60), width=3)
-            tag, color = "BEST", (255, 200, 60)
+            draw.rectangle([x - 2, y - 2, x + cell + 2, y + header + cell + 2], outline=best_c, width=3)
+            tag, color = "BEST", best_c
         else:
-            tag, color = f"#{i + 1}", (200, 200, 200)
+            tag, color = f"#{i + 1}", dim
 
         draw.text((x + 6, y + 6), f"{tag}", font=f_title, fill=color)
         draw.text(
             (x + 76, y + 8),
             f"{pr.file}  util={pr.utility:.3f}",
             font=f_small,
-            fill=(210, 210, 210),
+            fill=fg,
         )
         canvas.paste(thumb, (x + (cell - tw) // 2, y + header + (cell - th) // 2))
 
@@ -89,7 +97,7 @@ def contact_sheet(result, out_path: str | Path, cell: int = 420) -> Path:
             x + (cell - tw) // 2 + x2 * sx,
             y + header + (cell - th) // 2 + y2 * sy,
         )
-        draw.rectangle(box, outline=(255, 90, 90), width=2)
+        draw.rectangle(box, outline=box_c, width=2)
 
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
